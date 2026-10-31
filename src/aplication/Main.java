@@ -36,7 +36,17 @@ public class Main {
 
     public static void main(String[] args) {
         inicializarArreglos();
-        imprimir("Parqueadero listo con " + CAPACIDAD_TOTAL + " celdas.");
+        String opcion = "";
+        while (!opcion.equals("5")) {
+            mostrarMenu();
+            System.out.print("Seleccione una opción: ");
+            opcion = SCANNER.nextLine();
+            if (opcion.equals("1")) {
+                registrarEntrada();
+            } else if (!opcion.equals("5")) {
+                imprimir("Esa opción todavía no está lista.");
+            }
+        }
         SCANNER.close();
     }
 
@@ -50,8 +60,41 @@ public class Main {
         System.out.println(mensaje);
     }
 
+    static void mostrarMenu() {
+        imprimir("PARQUEADERO");
+        imprimir("1. Registrar entrada");
+        imprimir("2. Registrar salida");
+        imprimir("3. Reporte de ocupación");
+        imprimir("4. Reporte financiero");
+        imprimir("5. Salir");
+    }
 
+    static void registrarEntrada() {
+        // Buscar una celda libre
+        int celda = -1;
+        for (int i = 0; i < CAPACIDAD_TOTAL; i++) {
+            if (tipos[i] == null && celda == -1) {
+                celda = i;
+            }
+        }
+        if (celda == -1) {
+            imprimir("El parqueadero está lleno.");
+            return;
+        }
 
+        System.out.print("Tipo de vehículo (carro o moto): ");
+        String tipo = SCANNER.nextLine();
+        System.out.print("Fecha y hora de ingreso (yyyy-MM-dd HH:mm): ");
+        String texto = SCANNER.nextLine();
+        LocalDateTime ingreso = LocalDateTime.parse(texto, FORMATO_FECHA_HORA);
+
+        tipos[celda] = tipo;
+        ingresos[celda] = ingreso;
+        celdasOcupadas = celdasOcupadas + 1;
+        celdasLibres = celdasLibres - 1;
+
+        imprimir("Ingreso registrado en la celda " + (celda + 1));
+    }
 
 
 
