@@ -70,13 +70,7 @@ public class Main {
     }
 
     static void registrarEntrada() {
-        // Buscar una celda libre
-        int celda = -1;
-        for (int i = 0; i < CAPACIDAD_TOTAL; i++) {
-            if (tipos[i] == null && celda == -1) {
-                celda = i;
-            }
-        }
+        int celda = celdaDisponible();
         if (celda == -1) {
             imprimir("El parqueadero está lleno.");
             return;
@@ -96,7 +90,15 @@ public class Main {
         imprimir("Ingreso registrado en la celda " + (celda + 1));
     }
 
-
+    static int celdaDisponible() {
+        int celda = -1;
+        for (int i = 0; i < CAPACIDAD_TOTAL; i++) {
+            if (tipos[i] == null && celda == -1) {
+                celda = i;
+            }
+        }
+        return celda;
+    }
 
 
 
