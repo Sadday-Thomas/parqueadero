@@ -32,5 +32,36 @@ public class Main {
     static long recaudoCarros = 0;
     static long recaudoMotos = 0;
 
-    
+
+
+    public static void main(String[] args) {
+        inicializarArreglos();
+        imprimir("Parqueadero listo con " + CAPACIDAD_TOTAL + " celdas.");
+        SCANNER.close();
+    }
+
+    static void inicializarArreglos() {
+        for (int i = 0; i < CAPACIDAD_TOTAL; i++) {
+            tipos[i] = null;
+            ingresos[i] = null;
+        }
+    }
+    static void imprimir(String mensaje) {
+        System.out.println(mensaje);
+    }
+
+
+
+
+
+
+
+
+
+
 }
+
+
+
+
+
