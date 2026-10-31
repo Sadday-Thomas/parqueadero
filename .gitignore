@@ -5,6 +5,7 @@ out/
 .kotlin
 .idea
 parqueadero.iml
+out
 
 ### Eclipse ###
 .apt_generated
