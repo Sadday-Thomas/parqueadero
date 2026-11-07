@@ -117,10 +117,52 @@ public class Main {
         celdasLibres = celdasLibres + 1;
     }
 
-    // Provisional: se completa en el commit 7
+
+    static long contarDiasCompletos(LocalDateTime ingreso, LocalDateTime salida) {
+        return ChronoUnit.DAYS.between(ingreso, salida);
+    }
+
+    static long calcularHorasRestantes(LocalDateTime cursor, LocalDateTime salida) {
+        long minutosRestantes = Duration.between(cursor, salida).toMinutes();
+        return (minutosRestantes + 59) / 60;
+    }
+
     static long liquidacion(int numeroCelda, String tipo, LocalDateTime ingreso, LocalDateTime salida) {
-        imprimir("(Liquidación pendiente)");
-        return 0;
+        long dias = contarDiasCompletos(ingreso, salida);
+        LocalDateTime cursor = ingreso.plusDays(dias);
+        long horas = calcularHorasRestantes(cursor, salida);
+
+        if (horas >= UMBRAL_HORAS_DIA) {
+            dias = dias + 1;
+            horas = 0;
+        }
+
+        long tarifaDia;
+        long tarifaHora;
+        if (tipo.equals(CARRO)) {
+            tarifaDia = TARIFA_DIA_CARRO;
+            tarifaHora = TARIFA_HORA_CARRO;
+        } else {
+            tarifaDia = TARIFA_DIA_MOTO;
+            tarifaHora = TARIFA_HORA_MOTO;
+        }
+        long total = dias * tarifaDia + horas * tarifaHora;
+
+        imprimir("");
+        imprimir("======= FACTURA =======");
+        imprimir("Celda liberada: " + numeroCelda);
+        imprimir("Tipo: " + tipo);
+        imprimir("Ingreso: " + ingreso.format(FORMATO_FECHA_HORA));
+        imprimir("Salida: " + salida.format(FORMATO_FECHA_HORA));
+        if (dias > 0) {
+            imprimir(dias + " día(s) x $" + tarifaDia + " = $" + (dias * tarifaDia));
+        }
+        if (horas > 0) {
+            imprimir(horas + " hora(s) x $" + tarifaHora + " = $" + (horas * tarifaHora));
+        }
+        imprimir("TOTAL A PAGAR: $" + total);
+        imprimir("=======================");
+        return total;
     }
 
     static int celdaDisponible() {
