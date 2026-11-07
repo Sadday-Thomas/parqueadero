@@ -36,14 +36,13 @@ public class Main {
 
     public static void main(String[] args) {
         inicializarArreglos();
-        String opcion = "";
-        while (!opcion.equals("5")) {
+        int opcion = 0;
+        while (opcion != 5) {
             mostrarMenu();
-            System.out.print("Seleccione una opción: ");
-            opcion = SCANNER.nextLine();
-            if (opcion.equals("1")) {
+            opcion = leerEntero("Seleccione una opción: ", 1, 5);
+            if (opcion == 1) {
                 registrarEntrada();
-            } else if (!opcion.equals("5")) {
+            } else if (opcion != 5) {
                 imprimir("Esa opción todavía no está lista.");
             }
         }
@@ -150,6 +149,7 @@ public class Main {
         return 31;
     }
 
+
     static LocalDateTime leerFechaHora(String mensaje) {
         imprimir(mensaje);
         int anio = leerEntero("Año (2000-2100): ", 2000, 2100);
@@ -163,6 +163,9 @@ public class Main {
         }
         return LocalDateTime.of(anio, mes, dia, hora, minuto);
     }
+
+
+
 
 
 
