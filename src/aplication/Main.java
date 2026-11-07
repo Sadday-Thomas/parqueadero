@@ -44,8 +44,12 @@ public class Main {
                 registrarEntrada();
             } else if (opcion == 2) {
                 registrarSalida();
-            } else if (opcion != 5) {
-                imprimir("Esa opción todavía no está lista.");
+            } else if (opcion == 3) {
+                reporteOcupacion();
+            } else if (opcion == 4) {
+                reporteFinanciero();
+            } else {
+                imprimir("Gracias por usar el sistema.");
             }
         }
         SCANNER.close();
@@ -243,7 +247,20 @@ public class Main {
         return LocalDateTime.of(anio, mes, dia, hora, minuto);
     }
 
+    static void reporteOcupacion() {
+        imprimir("");
+        imprimir("--- Reporte de ocupación ---");
+        imprimir("Celdas ocupadas: " + celdasOcupadas);
+        imprimir("Celdas libres: " + celdasLibres);
+    }
 
+    static void reporteFinanciero() {
+        imprimir("");
+        imprimir("--- Reporte financiero ---");
+        imprimir("Recaudo carros: $" + recaudoCarros);
+        imprimir("Recaudo motos: $" + recaudoMotos);
+        imprimir("Total general: $" + (recaudoCarros + recaudoMotos));
+    }
 
 
 
