@@ -42,6 +42,8 @@ public class Main {
             opcion = leerEntero("Seleccione una opción: ", 1, 5);
             if (opcion == 1) {
                 registrarEntrada();
+            } else if (opcion == 2) {
+                registrarSalida();
             } else if (opcion != 5) {
                 imprimir("Esa opción todavía no está lista.");
             }
@@ -84,6 +86,41 @@ public class Main {
         celdasLibres = celdasLibres - 1;
 
         imprimir("Ingreso registrado en la celda " + (celda + 1));
+    }
+
+    static void registrarSalida() {
+        int celda = leerEntero("Número de celda (1-" + CAPACIDAD_TOTAL + "): ", 1, CAPACIDAD_TOTAL) - 1;
+        if (tipos[celda] == null) {
+            imprimir("Esa celda está libre.");
+            return;
+        }
+
+        LocalDateTime ingreso = ingresos[celda];
+        LocalDateTime salida = leerFechaHora("Fecha y hora de salida:");
+        while (salida.isBefore(ingreso)) {
+            imprimir("La salida no puede ser anterior al ingreso.");
+            salida = leerFechaHora("Fecha y hora de salida:");
+        }
+
+        String tipo = tipos[celda];
+        long total = liquidacion(celda + 1, tipo, ingreso, salida);
+
+        if (tipo.equals(CARRO)) {
+            recaudoCarros = recaudoCarros + total;
+        } else {
+            recaudoMotos = recaudoMotos + total;
+        }
+
+        tipos[celda] = null;
+        ingresos[celda] = null;
+        celdasOcupadas = celdasOcupadas - 1;
+        celdasLibres = celdasLibres + 1;
+    }
+
+    // Provisional: se completa en el commit 7
+    static long liquidacion(int numeroCelda, String tipo, LocalDateTime ingreso, LocalDateTime salida) {
+        imprimir("(Liquidación pendiente)");
+        return 0;
     }
 
     static int celdaDisponible() {
