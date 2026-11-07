@@ -8,7 +8,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Scanner;
 
 public class Main {
-    static final int CAPACIDAD_TOTAL = 0;
+    static final int CAPACIDAD_TOTAL = 10;
     static final int TARIFA_HORA_CARRO = 4000;
     static final int TARIFA_DIA_CARRO = 30000;
     static final int TARIFA_HORA_MOTO = 2000;
@@ -76,11 +76,8 @@ public class Main {
             return;
         }
 
-        System.out.print("Tipo de vehículo (carro o moto): ");
-        String tipo = SCANNER.nextLine();
-        System.out.print("Fecha y hora de ingreso (yyyy-MM-dd HH:mm): ");
-        String texto = SCANNER.nextLine();
-        LocalDateTime ingreso = LocalDateTime.parse(texto, FORMATO_FECHA_HORA);
+        String tipo = leerTipoVehiculo();
+        LocalDateTime ingreso = leerFechaHora("Fecha y hora de ingreso:");
 
         tipos[celda] = tipo;
         ingresos[celda] = ingreso;
@@ -98,6 +95,73 @@ public class Main {
             }
         }
         return celda;
+    }
+
+    static int leerDigitos(String texto, int inicio, int cantidad) {
+        int valor = 0;
+        for (int i = inicio; i < inicio + cantidad; i++) {
+            char caracter = texto.charAt(i);
+            if (caracter < '0' || caracter > '9') {
+                return -1;
+            }
+            valor = valor * 10 + caracter - '0';
+        }
+        return valor;
+    }
+
+    static int leerEntero(String mensaje, int minimo, int maximo) {
+        int valor = -1;
+        boolean valido = false;
+        while (!valido) {
+            System.out.print(mensaje);
+            String texto = SCANNER.nextLine().trim();
+            if (texto.length() > 0 && texto.length() <= 9) {
+                valor = leerDigitos(texto, 0, texto.length());
+                if (valor >= minimo && valor <= maximo) {
+                    valido = true;
+                }
+            }
+            if (!valido) {
+                imprimir("Dato inválido. Escriba un número entre " + minimo + " y " + maximo + ".");
+            }
+        }
+        return valor;
+    }
+
+    static String leerTipoVehiculo() {
+        int opcion = leerEntero("Tipo de vehículo (1 = carro, 2 = moto): ", 1, 2);
+        if (opcion == 1) {
+            return CARRO;
+        } else {
+            return MOTO;
+        }
+    }
+
+    static int diasDelMes(int anio, int mes) {
+        if (mes == 2) {
+            if ((anio % 4 == 0 && anio % 100 != 0) || anio % 400 == 0) {
+                return 29;
+            }
+            return 28;
+        }
+        if (mes == 4 || mes == 6 || mes == 9 || mes == 11) {
+            return 30;
+        }
+        return 31;
+    }
+
+    static LocalDateTime leerFechaHora(String mensaje) {
+        imprimir(mensaje);
+        int anio = leerEntero("Año (2000-2100): ", 2000, 2100);
+        int mes = leerEntero("Mes (1-12): ", 1, 12);
+        int ultimoDia = diasDelMes(anio, mes);
+        int dia = leerEntero("Día (1-" + ultimoDia + "): ", 1, ultimoDia);
+        int hora = leerEntero("Hora (" + HORA_APERTURA + "-" + HORA_CIERRE + "): ", HORA_APERTURA, HORA_CIERRE);
+        int minuto = 0;
+        if (hora != HORA_CIERRE) {
+            minuto = leerEntero("Minuto (0-59): ", 0, 59);
+        }
+        return LocalDateTime.of(anio, mes, dia, hora, minuto);
     }
 
 
